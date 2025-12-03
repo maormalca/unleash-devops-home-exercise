@@ -1,0 +1,33 @@
+name: Deploy App
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types: [completed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Configure AWS
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Update kubeconfig
+      run: aws eks update-kubeconfig --name unleash-exercise-cluster --region ${{ secrets.AWS_REGION }}
+
+    - name: Deploy
+      run: kubectl apply -f k8s/
+
+    - name: Wait for deployment
+      run: kubectl rollout status deployment/app
+
+    - name: Get service URL
+      run: kubectl get svc app-service
