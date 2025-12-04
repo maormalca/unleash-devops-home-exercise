@@ -24,7 +24,7 @@ spec:
 
       containers:
       - name: app
-        image: node:18-alpine  # Placeholder - CD pipeline will update this with ECR image
+        image: 532150070616.dkr.ecr.eu-north-1.amazonaws.com/unleash-exercise-repo:latest
         ports:
         - containerPort: 3000
           protocol: TCP
@@ -43,32 +43,4 @@ spec:
             memory: "256Mi"
             cpu: "200m"
 
-        # Liveness probe - restart container if it becomes unresponsive
-        livenessProbe:
-          httpGet:
-            path: /check-file?fileName=health-check.txt
-            port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
 
-        # Readiness probe - remove pod from load balancer if not ready
-        readinessProbe:
-          httpGet:
-            path: /check-file?fileName=health-check.txt
-            port: 3000
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 3
-          failureThreshold: 3
-
-        # Security context - run as non-root with minimal privileges
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 1000
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          capabilities:
-            drop:
-            - ALL
