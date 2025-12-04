@@ -1,9 +1,4 @@
-# ==============================================================================
-# AWS EKS Infrastructure with IRSA
-# ==============================================================================
 # Deploys EKS cluster with pod-level AWS permissions via IRSA
-# Resources: EKS cluster, S3 bucket, ECR repository, IAM roles
-# ==============================================================================
 
 terraform {
   required_version = ">= 1.0"
