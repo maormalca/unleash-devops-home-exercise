@@ -1,31 +1,42 @@
-name: Deploy Infrastructure
+
+# Infrastructure Pipeline - Terraform
+# Triggered on: Manual (workflow_dispatch) OR push to master with terraform/ changes
+
+name: Infrastructure Pipeline
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Manual trigger 
+
   push:
     branches:
       - master
     paths:
-      - 'terraform/**'
+      - 'terraform/**'  # Only run when Terraform files change
 
 jobs:
-  deploy_infra_using_Terraform:
+  deploy-infrastructure:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Configure AWS
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+      # Authenticate with AWS
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
+      # Install Terraform CLI
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
 
-    - name: Terraform Apply
-      working-directory: terraform
-      run: |
-        terraform init
-        terraform apply -auto-approve
+      # Initialize and apply Terraform configuration
+      # -auto-approve
+      - name: Terraform init and apply
+        working-directory: terraform
+        run: |
+          terraform init
+          terraform apply -auto-approve
