@@ -24,7 +24,7 @@ spec:
 
       containers:
       - name: app
-        image:
+        image: node:18-alpine  # Placeholder - CD pipeline will update this with ECR image
         ports:
         - containerPort: 3000
           protocol: TCP

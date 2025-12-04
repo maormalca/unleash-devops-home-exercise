@@ -32,6 +32,17 @@ jobs:
             --name unleash-exercise-cluster \
             --region ${{ secrets.AWS_REGION }}
 
+      # Get ECR image URI and update deployment manifest
+      - name: Update deployment image
+        run: |
+          IMAGE_URI="$(aws ecr describe-repositories \
+            --repository-names unleash-exercise-repo \
+            --query 'repositories[0].repositoryUri' \
+            --output text):latest"
+
+          sed -i "s|image:.*|image: $IMAGE_URI|" k8s/deployment.yaml
+          echo "Updated deployment to use image: $IMAGE_URI"
+
       - name: Apply Kubernetes manifests
         run: kubectl apply -f k8s/
 
