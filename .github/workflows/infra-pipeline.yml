@@ -9,7 +9,7 @@ on:
       - 'terraform/**'
 
 jobs:
-  deploy:
+  deploy Infras using Terraform:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
