@@ -4,9 +4,10 @@
 name: CD Pipeline
 
 on:
-  workflow_run:
-    workflows: ["CI Pipeline"]
-    types: [completed]
+  workflow_dispatch:  # Manual trigger from GitHub Actions UI
+    workflow_run:
+      workflows: ["CI Pipeline"]
+      types: [completed]
 
 jobs:
   deploy-to-eks:
