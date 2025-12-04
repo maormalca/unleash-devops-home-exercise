@@ -13,6 +13,13 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  # S3 backend for remote state storage
+  backend "s3" {
+    bucket = "unleash-terraform-state-maor-malca"
+    key    = "terraform.tfstate"
+    region = "eu-north-1"
+  }
 }
 
 provider "aws" {
