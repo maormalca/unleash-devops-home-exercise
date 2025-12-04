@@ -12,7 +12,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Install all dependencies
+# Install all dependencies 
 RUN npm install
 
 # Copy source code and compile
