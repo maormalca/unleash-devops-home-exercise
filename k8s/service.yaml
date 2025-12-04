@@ -1,12 +1,24 @@
+
+# Exposes application via AWS Network Load Balancer
+
 apiVersion: v1
 kind: Service
 metadata:
   name: app-service
   namespace: default
+
 spec:
-  type: LoadBalancer
+  type: LoadBalancer  # Creates AWS Network Load Balancer with public endpoint
+
   selector:
-    app: app
+    app: app  # Route traffic to pods with this label
+
   ports:
-  - port: 80
-    targetPort: 3000
+  - name: http
+    protocol: TCP
+    port: 80         # External port 
+    targetPort: 3000 # Pod port
+
+# Get LoadBalancer URL: kubectl get svc app-service
+# Access: curl http://<EXTERNAL-IP>/check-file?fileName=test.txt
+

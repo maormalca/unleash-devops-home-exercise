@@ -1,42 +1,35 @@
+# Multi-Stage Docker Build for Node.js TypeScript Application
+# Stage 1: Build - Compile TypeScript to JavaScript
+# Stage 2: Runtime - Run compiled code with minimal dependencies
 
-# Use a multi-stage build to separate the compilation environment from the runtime environment.
 
-# BUILD STAGE
-
+# Build Stage - Compile TypeScript
 FROM node:20-alpine AS builder
 
-# Set the working directory inside the container image
 WORKDIR /app
 
-# Copy dependency files 
+# Copy dependency files
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Install dependencies 
+# Install all dependencies
 RUN npm install
 
-# Copy all source code files
+# Copy source code and compile
 COPY . .
-
-# Run the TypeScript compilation step
 RUN npm run build
 
-
-# RUNTIME STAGE
-
+# Runtime Stage - Minimal production image
 FROM node:20-alpine AS runner
 
-# working directory
 WORKDIR /app
 
-# Copy runtime node_modules from the builder stage
+# Copy dependencies and compiled code from builder
 COPY --from=builder /app/node_modules ./node_modules
-
-# Copy the compiled JavaScript code from the 'dist' directory of the builder stage
 COPY --from=builder /app/dist ./dist
 
-# Expose listen default port
+# Applistens on port 3000
 EXPOSE 3000
 
-#run the application
+# Run the compiled JavaScript
 CMD ["node", "dist/index.js"]

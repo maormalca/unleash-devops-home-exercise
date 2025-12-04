@@ -1,24 +1,74 @@
+# Deploys application with 2 replicas for high availability
+# Uses IRSA for AWS authentication (no hardcoded credentials)
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app
   namespace: default
+
 spec:
-  replicas: 2
+  replicas: 2  
   selector:
     matchLabels:
       app: app
+
   template:
     metadata:
       labels:
         app: app
+
     spec:
+      # Use ServiceAccount with IRSA annotation for AWS access
       serviceAccountName: app-sa
+
       containers:
       - name: app
-        image: REPLACE_IMAGE
+        image:
         ports:
         - containerPort: 3000
+          protocol: TCP
+          name: http
+
         env:
         - name: BUCKET_NAME
           value: "unleash-exercise-bucket-12345"
+
+        # Resource limits prevent single pod from consuming all node resources
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+
+        # Liveness probe - restart container if it becomes unresponsive
+        livenessProbe:
+          httpGet:
+            path: /check-file?fileName=health-check.txt
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        # Readiness probe - remove pod from load balancer if not ready
+        readinessProbe:
+          httpGet:
+            path: /check-file?fileName=health-check.txt
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+
+        # Security context - run as non-root with minimal privileges
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL

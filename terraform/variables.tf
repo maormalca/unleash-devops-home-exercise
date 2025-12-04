@@ -1,15 +1,27 @@
+# ==============================================================================
+# Terraform Variables
+# ==============================================================================
+
 variable "aws_region" {
-  default = "eu-north-1"
+  description = "AWS region for all resources"
+  type        = string
+  default     = "eu-north-1"
 }
 
 variable "cluster_name" {
-  default = "unleash-exercise-cluster"
+  description = "EKS cluster name"
+  type        = string
+  default     = "unleash-exercise-cluster"
 }
 
 variable "s3_bucket_name" {
-  default = "unleash-exercise-bucket-12345"
+  description = "S3 bucket name (must be globally unique)"
+  type        = string
+  default     = "unleash-exercise-bucket-12345"
 }
 
 variable "ecr_repository_name" {
-  default = "unleash-exercise-repo"
+  description = "ECR repository name for Docker images"
+  type        = string
+  default     = "unleash-exercise-repo"
 }
