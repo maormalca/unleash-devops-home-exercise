@@ -278,27 +278,30 @@ aws ecr batch-delete-image \
 ---
 
 ## Project Structure
+## Project Structure
 
 ```
 .
-   .github/
-      workflows/
-          ci-pipeline.yml          # Build and push Docker image
-          cd-pipeline.yml          # Deploy to EKS
-          infra-pipeline.yml       # Terraform automation
-   k8s/
-      deployment.yaml              # Pod specification
-      service.yaml                 # LoadBalancer configuration
-      serviceaccount.yaml          # IRSA annotation
-   terraform/
-      main.tf                      # EKS, S3, ECR, IRSA resources
-      variables.tf                 # Input variables
-      outputs.tf                   # Output values
-   dockerfile                       # Multi-stage Docker build
-   index.ts                         # Express application
-   package.json                     # Node.js dependencies
-   tsconfig.json                    # TypeScript configuration
-   README.md                        # This file
+├── .github/
+│   └── workflows/
+│       ├── ci-pipeline.yml          # Build and push Docker image
+│       ├── cd-pipeline.yml          # Deploy to EKS
+│       └── infra-pipeline.yml       # Terraform automation
+├── k8s/
+│   ├── deployment.yaml              # Pod specification
+│   ├── service.yaml                 # LoadBalancer configuration
+│   └── serviceaccount.yaml          # IRSA annotation
+├── terraform/
+│   ├── main.tf                      # EKS, S3, ECR, IRSA resources
+│   ├── variables.tf                 # Input variables
+│   └── outputs.tf                   # Output values
+├── dockerfile                       # Multi-stage Docker build
+├── index.ts                         # Express application
+├── package.json                     # Node.js dependencies
+├── tsconfig.json                    # TypeScript configuration
+└── README.md                        # This file
+```
+
 ```
 
 ---
