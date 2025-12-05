@@ -268,7 +268,6 @@ aws ecr batch-delete-image \
 ---
 
 ## Project Structure
-## Project Structure
 
 ```
 .
