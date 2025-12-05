@@ -247,7 +247,9 @@ Wait 2-3 minutes for AWS to provision the LoadBalancer.
 echo "test content" > test.txt
 aws s3 cp test.txt s3://unleash-exercise-bucket-12345/test.txt
 ```
-I already did that so you can skip the Upload Test File to S3 (if you destroy and apply the infra again you need to do it)
+
+**Note:** I already did that so you can skip the Upload Test File to S3 (if you destroy and apply the infra again you need to do it)
+
 ### Test API Endpoint
 
 ```bash
@@ -256,6 +258,7 @@ LB_URL=$(kubectl get svc app-service -o jsonpath='{.status.loadBalancer.ingress[
 
 # Test existing file
 curl "http://$LB_URL/check-file?fileName=test.txt"
+```
 
 ---
 
@@ -265,8 +268,7 @@ curl "http://$LB_URL/check-file?fileName=test.txt"
 
 Run the infra pipeline with `destroy` action
 
-
-**shim lev** you need to Manually delete ECR images before destroying infrastructure:
+**Note:** You need to manually delete ECR images before destroying infrastructure:
 ```bash
 aws ecr batch-delete-image \
   --repository-name unleash-exercise-repo \
