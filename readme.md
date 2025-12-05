@@ -133,16 +133,6 @@ The CI pipeline uses **AWS access keys** ( maor.malca) stored as GitHub reposito
 
 ## Infrastructure as Code
 
-### Why AWS EKS?
-
-EKS was chosen for the following reasons:
-
-1. **Managed Control Plane:** AWS handles Kubernetes master node patching, upgrades, and availability
-2. **Native AWS Integration:** Seamless integration with ECR, IAM, VPC, and CloudWatch
-3. **IRSA Support:** Pod-level IAM permissions without credential management
-4. **Production-Ready:** High availability, auto-scaling, and monitoring out of the box
-5. **Industry Standard:** Kubernetes is the de facto container orchestration platform
-
 ### Terraform Resources
 
 **Core Infrastructure:**
